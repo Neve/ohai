@@ -95,6 +95,12 @@ Ohai.plugin(:OpenstackV2) do
   end
 
   # Cleaning duplicated values in EC2 meta and OpenStack meta
+  #
+  # === Args
+  # target_hash[Hash] - hash with EC2 metadata.
+  #
+  # === Return
+  # target_hash[Hash] - target_hash with duplicated metadata removed.
   def cleanup_metadata(target_hash)
     redundant_keys= [/^public_keys_\d_openssh_key$/, /^name$/]
 
@@ -148,7 +154,7 @@ Ohai.plugin(:OpenstackV2) do
         fetch_metadata.each { |k, v| openstack[k] = v }
 
         # Insert OpenStack cloud userdata
-        fetch_openstack_api_metadata(openstack, :True)
+        fetch_openstack_api_metadata(openstack, :False)
         # Remove duplicated entries from hash to reduce its size.
         cleanup_metadata(openstack)
       else
