@@ -27,13 +27,13 @@ Ohai.plugin(:OpenstackV2) do
   #
   # === Args
   # command[String] -  command to check and run
-  # arguments[String] - command argiments
+  # arguments[String] - command arguments
   # user_path[String] - user defined PATHs to add to shell_out path.
   #
   # === Return
   # string:: Execution output If command binary exists
   # string:: "fail" if command execution return anything then 0
-  def shell_out_safe(command, arguments, user_paths='')
+  def shell_out_safe(command, arguments='', user_paths='')
     so_path='/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
     so_path<<user_paths
     # Checking if the command exists in standard paths to prevent
@@ -167,7 +167,7 @@ Ohai.plugin(:OpenstackV2) do
       end
 
       out = shell_out_safe('lscpu', ' | grep \'Hypervisor vendor\'')
-      openstack['hypervisor'] = out.to_s.split(':')[1].strip unless out == 'fail'
+      openstack['hypervisor'] = out.split(':')[1].strip unless out == 'fail'
 
       out = shell_out_safe('cat', '/sys/devices/virtual/dmi/id/product_version')
       openstack['cloud_version'] = out unless out == 'fail'
