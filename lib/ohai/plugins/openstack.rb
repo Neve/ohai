@@ -1,6 +1,6 @@
 #
 # Author:: Matt Ray (<matt@opscode.com>)
-# Updated n.takanov@gmail.com
+# Updated: Nick Stakanov  (<n.takanov@gmail.com>)
 # Copyright:: Copyright (c) 2012 Opscode, Inc.
 # License:: Apache License, Version 2.0
 #
@@ -24,6 +24,11 @@ Ohai.plugin(:OpenstackV2) do
   include Ohai::Mixin::Ec2Metadata
 
   # Checks if required command exists and can be executed.
+  #
+  # === Args
+  # command[String] -  command to check and run
+  # arguments[String] - command argiments
+  # user_path[String] - user defined PATHs to add to shell_out path.
   #
   # === Return
   # string:: Execution output If command binary exists
@@ -153,7 +158,7 @@ Ohai.plugin(:OpenstackV2) do
         Ohai::Log.debug('  Connecting to the OpenStack EC2 metadata service')
         fetch_metadata.each { |k, v| openstack[k] = v }
 
-        # Insert OpenStack cloud userdata
+        # Insert native OpenStack cloud metadata
         fetch_openstack_api_metadata(openstack, :False)
         # Remove duplicated entries from hash to reduce its size.
         cleanup_metadata(openstack)
