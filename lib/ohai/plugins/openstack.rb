@@ -130,8 +130,14 @@ Ohai.plugin(:OpenstackV2) do
     out = shell_out_safe('cat', '/sys/devices/virtual/dmi/id/product_name')
     Ohai::Log.debug(" GET #{out}")
 
-    if hint?('openstack') || out.include?('OpenStack')
+    if hint?('openstack') || hint?('hp') || out.include?('OpenStack')
       Ohai::Log.info('  Ohai openstack plugin online')
+
+      if hint?('hp')
+        openstack['provider'] = 'hp'
+      else
+        openstack['provider'] = 'openstack'
+      end
 
       # Adds openstack Mash
       openstack Mash.new
